@@ -1,6 +1,8 @@
 Samune
 ======
 
+[![Build Status](https://travis-ci.org/eiurur/Samune.svg?branch=master)](https://travis-ci.org/eiurur/Samune)
+
 Generator of thumbnails from URL.
 
 # Dependencies
