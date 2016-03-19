@@ -6,8 +6,9 @@
   "scripts": {
     "test": "node_modules/mocha/bin/_mocha --timeout 15000 --require 'espower-coffee/guess' test/**/*.coffee",
     "setup": "npm i && npm run compile",
-    "compile": "coffee -o build/ src/",
-    "dev": "coffee -o build/ -w src/"
+    "compile": "node_modules/coffee-script/bin/coffee -o build/ src/",
+    "dev": "node_modules/coffee-script/bin/coffee -o build/ -w src/",
+    "install": "npm run compile"
   },
   "repository": {
     "type": "git",
