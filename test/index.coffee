@@ -4,14 +4,15 @@ path   = require 'path'
 assert = require 'power-assert'
 Samune = require path.join '..', 'build'
 
-THUMBNAIL_DIR = './thumbnails'
+THUMBNAIL_DIR        = './thumbnails'
 IMAGES_THUMBNAIL_DIR = './images/thumbnails'
 
 JPG_URL_LIST = [
   'https://41.media.tumblr.com/c6c0457f2c6886fc31099b590558c795/tumblr_nw0d6oxTtZ1s21xzoo2_1280.jpg'
-   'http://40.media.tumblr.com/6f8c17e057df703c5aad256b9d1524ff/tumblr_n7tyjjGIyN1qzvtljo1_1280.jpg'
- ]
+  'http://40.media.tumblr.com/6f8c17e057df703c5aad256b9d1524ff/tumblr_n7tyjjGIyN1qzvtljo1_1280.jpg'
+]
 GIF_URL = 'https://49.media.tumblr.com/6179526c67d94cdba1d1f0f2b4a19f82/tumblr_nwqf0mSPsq1u86t2qo1_540.gif'
+
 
 describe 'Samune', ->
 

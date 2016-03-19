@@ -6,9 +6,12 @@
   "scripts": {
     "test": "node_modules/mocha/bin/_mocha --timeout 15000 --require 'espower-coffee/guess' test/**/*.coffee",
     "setup": "npm i && npm run compile",
-    "start": "node build/index",
     "compile": "coffee -o build/ src/",
     "dev": "coffee -o build/ -w src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eiurur/Samune.git"
   },
   "keywords": [
     "thumbnail",
@@ -17,7 +20,6 @@
   "author": "eiurur",
   "license": "MIT",
   "dependencies": {
-    "chalk": "^1.1.1",
     "imagemagick": "^0.1.3",
     "lodash": "^4.6.1",
     "mkdirp": "^0.5.1",

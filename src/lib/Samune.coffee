@@ -1,4 +1,3 @@
-chalk        = require 'chalk'
 fs           = require 'fs'
 _            = require 'lodash'
 path         = require 'path'
