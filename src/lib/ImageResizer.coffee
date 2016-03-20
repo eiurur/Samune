@@ -9,16 +9,16 @@ module.exports = class ImageResizer
 
   constructor: (@url, @filename, @dstDir, @canCleanupOriginalImage = true) ->
     filename = @url.split('/').pop()
+    filepath = path.resolve(@url)
     @ext = path.extname(filename) or '.jpg'
 
     if @isURL()
-      @filename = (@filename or randomstring.generate())
-      @srcDir = @dstDir
+      @filename    = @filename or randomstring.generate()
+      @srcDir      = @dstDir
       @srcFilename = "#{@filename}#{@ext}"
     else # path
-      filepath = path.resolve(@url)
-      @filename = filename.replace(@ext, '')
-      @srcDir = path.resolve(filepath.replace(filename, ''))
+      @filename    = @filename or filename.replace(@ext, '')
+      @srcDir      = path.resolve(filepath.replace(filename, ''))
       @srcFilename = filename
 
   isURL: ->
@@ -32,7 +32,7 @@ module.exports = class ImageResizer
 
       @generateDir()
 
-      # HACK: 汚い
+      # HACK: コピペしたので汚い
       if @isURL()
         @write()
         .then (filename) =>
