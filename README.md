@@ -2,6 +2,7 @@ Samune
 ======
 
 [![Build Status](https://travis-ci.org/eiurur/Samune.svg?branch=master)](https://travis-ci.org/eiurur/Samune)
+[![Code Climate](https://codeclimate.com/github/eiurur/Samune/badges/gpa.svg)](https://codeclimate.com/github/eiurur/Samune)
 
 Generator of thumbnails from URL.
 
@@ -15,6 +16,8 @@ Generator of thumbnails from URL.
 
 # Usage
 
+**URL**
+
     const Samune = require('samune');
 
     const opts = {
@@ -25,3 +28,16 @@ Generator of thumbnails from URL.
     }
     const samune = new Samune(opts);
     samune.generate([30, 120, 240, 480]);
+
+**Filepath**
+
+    const Samune = require('samune');
+
+    const opts = {
+      url: '/path/to/test.jpg',
+      filename: 'test', /* any */
+      dstDir: '/path/to/thumbnails_dir',
+      canCleanupOriginalImage: false, /* any */
+    }
+    const samune = new Samune(opts);
+    samune.generate([480]);
