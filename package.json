@@ -1,13 +1,13 @@
 {
   "name": "samune",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Generator of thumbnails",
   "main": "build/index.js",
   "scripts": {
     "test": "node_modules/mocha/bin/_mocha --timeout 15000 --require 'espower-coffee/guess' test/**/*.coffee",
     "setup": "npm i && npm run compile",
     "compile": "node_modules/coffee-script/bin/coffee -o build/ src/",
-    "dev": "node_modules/coffee-script/bin/coffee -o build/ -w src/",
+    "dev": "coffee -o build/ -w src/",
     "install": "npm run compile"
   },
   "repository": {
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "coffee-script": "^1.10.0",
+    "coveralls": "^2.11.8",
     "espower-coffee": "^1.0.1",
     "espower-loader": "^1.0.0",
     "intelli-espower-loader": "^1.0.1",
