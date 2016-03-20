@@ -16,28 +16,9 @@ JPG_PATH = './images_test/syaro.jpg'
 
 describe 'Samune', ->
 
-  it 'should generate jpg file when pass jpg path', ->
-    opts =
-      url: JPG_PATH
-      dstDir: THUMBNAIL_DIR
-    samune = new Samune(opts)
-    samune.generate([30, 120])
-    .then (thuimbnailFilenameList) ->
-      assert _.isArray thuimbnailFilenameList
-      assert thuimbnailFilenameList.length is 2
-
-  it 'should generate jpg file when pass jpg path', ->
-    opts =
-      url: JPG_PATH
-      filename: 'test_syaro'
-      dstDir: THUMBNAIL_DIR
-    samune = new Samune(opts)
-    samune.generate([30, 120])
-    .then (thuimbnailFilenameList) ->
-      assert fs.existsSync("#{THUMBNAIL_DIR}/test_syaro_w120.jpg")
-      assert _.isArray thuimbnailFilenameList
-      assert thuimbnailFilenameList.length is 2
-
+  ###
+  URL TEST
+  ###
   it 'should generate jpg file when pass jpg url', ->
     opts =
       url: JPG_URL_LIST[0]
@@ -103,6 +84,37 @@ describe 'Samune', ->
       assert _.isArray thuimbnailFilenameList
       assert thuimbnailFilenameList.length is 1
 
+
+  ###
+  Filepath TEST
+  ###
+  it 'should generate jpg file when pass jpg path', ->
+    opts =
+      url: JPG_PATH
+      dstDir: THUMBNAIL_DIR
+    samune = new Samune(opts)
+    samune.generate([30, 120])
+    .then (thuimbnailFilenameList) ->
+      assert fs.existsSync("#{THUMBNAIL_DIR}/syaro_w120.jpg")
+      assert _.isArray thuimbnailFilenameList
+      assert thuimbnailFilenameList.length is 2
+
+  it 'should generate jpg file when pass jpg path', ->
+    opts =
+      url: JPG_PATH
+      filename: 'test_syaro'
+      dstDir: THUMBNAIL_DIR
+    samune = new Samune(opts)
+    samune.generate([30, 120])
+    .then (thuimbnailFilenameList) ->
+      assert fs.existsSync("#{THUMBNAIL_DIR}/test_syaro_w120.jpg")
+      assert _.isArray thuimbnailFilenameList
+      assert thuimbnailFilenameList.length is 2
+
+
+  ###
+  Failure TEST
+  ###
   it 'should return [] when pass invliad url', ->
     opts =
       url: 'invalidurl'
