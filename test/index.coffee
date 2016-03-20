@@ -12,9 +12,19 @@ JPG_URL_LIST = [
   'http://40.media.tumblr.com/6f8c17e057df703c5aad256b9d1524ff/tumblr_n7tyjjGIyN1qzvtljo1_1280.jpg'
 ]
 GIF_URL = 'https://49.media.tumblr.com/6179526c67d94cdba1d1f0f2b4a19f82/tumblr_nwqf0mSPsq1u86t2qo1_540.gif'
-
+JPG_PATH = './images_test/syaro.jpg'
 
 describe 'Samune', ->
+
+  it 'should generate jpg file when pass jpg path', ->
+    opts =
+      url: JPG_PATH
+      dstDir: THUMBNAIL_DIR
+    samune = new Samune(opts)
+    samune.generate([30, 120])
+    .then (thuimbnailFilenameList) ->
+      assert _.isArray thuimbnailFilenameList
+      assert thuimbnailFilenameList.length is 2
 
   it 'should generate jpg file when pass jpg url', ->
     opts =

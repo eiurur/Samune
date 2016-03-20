@@ -10,7 +10,20 @@ module.exports = class ImageResizer
   constructor: (@url, @filename, @dstDir, @canCleanupOriginalImage = true) ->
     filename = @url.split('/').pop()
     @ext = path.extname(filename) or '.jpg'
-    @filename = (@filename or randomstring.generate())
+
+    if @isURL()
+      @filename = (@filename or randomstring.generate())
+      @srcDir = @dstDir
+      @srcFilename = "#{@filename}#{@ext}"
+    else # path
+      filepath = path.resolve(@url)
+      @filename = filename.replace(@ext, '')
+      @srcDir = path.resolve(filepath.replace(filename, ''))
+      @srcFilename = filename
+
+  isURL: ->
+    url_pattern = /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\\,%#]+)$/
+    return url_pattern.test @url
 
   exec: (sizes) ->
     return new Promise (resolve, reject) =>
@@ -18,15 +31,26 @@ module.exports = class ImageResizer
       throw new Error 'dstDir is invalid' if !@dstDir
 
       @generateDir()
-      @write()
-      .then (filename) =>
+
+      # HACK: 汚い
+      if @isURL()
+        @write()
+        .then (filename) =>
+          promises = sizes.map (size) => return @resize(size)
+          Promise.all promises
+        .then (thuimbnailFilenameList) =>
+          if @canCleanupOriginalImage then @cleanupOriginalImage()
+          return resolve thuimbnailFilenameList
+        .catch (err) ->
+          return reject err
+      else
         promises = sizes.map (size) => return @resize(size)
         Promise.all promises
-      .then (thuimbnailFilenameList) =>
-        if @canCleanupOriginalImage then @cleanupOriginalImage()
-        return resolve thuimbnailFilenameList
-      .catch (err) ->
-        return reject err
+        .then (thuimbnailFilenameList) =>
+          if @canCleanupOriginalImage then @cleanupOriginalImage()
+          return resolve thuimbnailFilenameList
+        .catch (err) ->
+          return reject err
 
   generateDir: ->
     fs.existsSync(@dstDir) or mkdirp.sync(@dstDir)
@@ -39,7 +63,7 @@ module.exports = class ImageResizer
   resize: (width) ->
     return new Promise (resolve, reject) =>
       options =
-        srcPath: path.resolve("#{@dstDir}/#{@filename}#{@ext}")
+        srcPath: path.resolve("#{@srcDir}/#{@srcFilename}")
         dstPath: path.resolve("#{@dstDir}/#{@filename}_w#{width}#{@ext}")
         format: @ext.replace('.', '')
         width: width
