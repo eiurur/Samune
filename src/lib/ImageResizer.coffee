@@ -1,62 +1,23 @@
-fs           = require 'fs'
-im           = require 'imagemagick'
-mkdirp       = require 'mkdirp'
-path         = require 'path'
-randomstring = require 'randomstring'
-request      = require 'request'
+fs               = require 'fs'
+im               = require 'imagemagick'
+path             = require 'path'
+request          = require 'request'
+DirectoryManager = require './DirectoryManager'
+
 
 module.exports = class ImageResizer
 
   constructor: (@url, @filename, @dstDir, @canCleanupOriginalImage = true) ->
-    filename = @url.split('/').pop()
-    filepath = path.resolve(@url)
-    @ext = path.extname(filename) or '.jpg'
+    @originalFilename = @url.split('/').pop()
+    @ext = path.extname(@originalFilename) or '.jpg'
 
-    if @isURL()
-      @filename    = @filename or randomstring.generate()
-      @srcDir      = @dstDir
-      @srcFilename = "#{@filename}#{@ext}"
-    else # path
-      @filename    = @filename or filename.replace(@ext, '')
-      @srcDir      = path.resolve(filepath.replace(filename, ''))
-      @srcFilename = filename
-
-  isURL: ->
-    url_pattern = /^(https?|ftp)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\\,%#]+)$/
-    return url_pattern.test @url
-
-  exec: (sizes) ->
+  generateDestinationDirectory: ->
     return new Promise (resolve, reject) =>
-      # todo: これってここ？
       throw new Error 'dstDir is invalid' if !@dstDir
-
-      @generateDir()
-
-      # HACK: コピペしたので汚い
-      if @isURL()
-        @write()
-        .then (filename) =>
-          promises = sizes.map (size) => return @resize(size)
-          Promise.all promises
-        .then (thuimbnailFilenameList) =>
-          if @canCleanupOriginalImage then @cleanupOriginalImage()
-          return resolve thuimbnailFilenameList
-        .catch (err) ->
-          return reject err
-      else
-        promises = sizes.map (size) => return @resize(size)
-        Promise.all promises
-        .then (thuimbnailFilenameList) =>
-          if @canCleanupOriginalImage then @cleanupOriginalImage()
-          return resolve thuimbnailFilenameList
-        .catch (err) ->
-          return reject err
-
-  generateDir: ->
-    fs.existsSync(@dstDir) or mkdirp.sync(@dstDir)
+      return resolve DirectoryManager.generateSync(@dstDir)
 
   cleanupOriginalImage: ->
-    return unless fs.existsSync("#{@dstDir}/#{@filename}#{@ext}")
+    return unless DirectoryManager.existsSync "#{@dstDir}/#{@filename}#{@ext}"
     fs.unlink("#{@dstDir}/#{@filename}#{@ext}")
 
   # TODO: サイズの大きい方向に合わせてリサイズする。(今はwidth固定)

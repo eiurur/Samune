@@ -1,19 +1,22 @@
-fs           = require 'fs'
-_            = require 'lodash'
-path         = require 'path'
-ImageResizer = require './ImageResizer'
+_                = require 'lodash'
+URLChecker       = require './URLChecker'
+URLImageResizer  = require './URLImageResizer'
+PathImageResizer = require './PathImageResizer'
 
-module.exports = class Samune extends ImageResizer
+module.exports = class Samune
 
   constructor: (opts) ->
-    super(opts.url, opts.filename, opts.dstDir, opts.canCleanupOriginalImage)
+    if URLChecker.isURL opts.url
+      @imageResizer = new URLImageResizer(opts.url, opts.filename, opts.dstDir, opts.canCleanupOriginalImage)
+    else
+      @imageResizer = new PathImageResizer(opts.url, opts.filename, opts.dstDir, opts.canCleanupOriginalImage)
 
   generate: (sizes) ->
     return new Promise (resolve, reject) =>
-      @sizes = if _.isArray(sizes) then sizes else [sizes]
-      throw new Error 'sizes is empty' if _.isUndefined _.first @sizes
-      throw new Error 'sizes include NaN' unless @sizes.every (size) -> return _.isNumber size
+      sizes = if _.isArray(sizes) then sizes else [sizes]
+      throw new Error 'sizes is empty' if _.isUndefined _.first sizes
+      throw new Error 'sizes include NaN' unless sizes.every (size) -> return _.isNumber size
 
-      @exec(@sizes)
+      @imageResizer.exec(sizes)
       .then (thuimbnailFilenameList) -> return resolve thuimbnailFilenameList
       .catch (err) -> return reject err
