@@ -2,4 +2,3 @@ node_modules/*
 images/*
 thumbnails/*
 npm-debug*
-build/*
