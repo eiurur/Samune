@@ -33,6 +33,18 @@
       })(this));
     };
 
+    Samune.prototype.getFileSizeBite = function() {
+      return new Promise((function(_this) {
+        return function(resolve, reject) {
+          return URLChecker.getFileSizeBite().then(function(bite) {
+            return resolve(bite);
+          })["catch"](function(err) {
+            return reject(new Error(err));
+          });
+        };
+      })(this));
+    };
+
     Samune.prototype.generate = function(sizes) {
       return new Promise((function(_this) {
         return function(resolve, reject) {

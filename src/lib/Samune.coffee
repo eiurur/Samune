@@ -18,6 +18,12 @@ module.exports = class Samune
       .then (features) -> return resolve features
       .catch (err) => return reject new Error err
 
+  # TODO: URLだけサポート
+  getFileSizeBite: ->
+    return new Promise (resolve, reject) =>
+      URLChecker.getFileSizeBite()
+      .then (bite) -> return resolve bite
+      .catch (err) => return reject new Error err
 
   generate: (sizes) ->
     return new Promise (resolve, reject) =>

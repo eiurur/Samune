@@ -26,6 +26,19 @@
       });
     };
 
+    URLChecker.getFilesizeBite = function(url) {
+      return new Promise(function(resolve, reject) {
+        return request.get(url).on('response', function(response) {
+          if (response.statusCode !== 200) {
+            return reject('image url is invalid');
+          }
+          return resolve(response.headers['content-length']);
+        }).on('error', function(err) {
+          return reject(err);
+        });
+      });
+    };
+
     return URLChecker;
 
   })();

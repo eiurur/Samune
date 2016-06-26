@@ -14,3 +14,12 @@ module.exports = class URLChecker
         return resolve true
       .on 'error', (err) ->
         return reject err
+
+  @getFilesizeBite: (url) ->
+    return new Promise (resolve, reject) ->
+      request.get(url)
+      .on 'response', (response) ->
+        unless response.statusCode is 200 then return reject 'image url is invalid'
+        return resolve response.headers['content-length']
+      .on 'error', (err) ->
+        return reject err
