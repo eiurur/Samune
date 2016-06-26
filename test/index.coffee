@@ -99,7 +99,7 @@ describe 'Samune', ->
       assert _.isArray thuimbnailFilenameList
       assert thuimbnailFilenameList.length is 2
 
-  it 'should generate jpg file when pass jpg path', ->
+  it 'should generate jpg file when pass jpg path and filename', ->
     opts =
       url: JPG_PATH
       filename: 'test_syaro'
@@ -111,13 +111,51 @@ describe 'Samune', ->
       assert _.isArray thuimbnailFilenameList
       assert thuimbnailFilenameList.length is 2
 
+  # Identify
+  it 'should return image features when pass jpg path', ->
+    opts =
+      url: JPG_PATH
+      filename: 'test_syaro'
+      dstDir: THUMBNAIL_DIR
+    samune = new Samune(opts)
+    samune.identify()
+    .then (features) ->
+      assert _.isObject features
+      assert _.isNumber features.width
+      assert _.isNumber features.height
+      assert _.isString features.filesize
+      assert features.format is 'JPEG'
+
+  it 'should return image features when pass jpg url', ->
+    opts =
+      url: JPG_URL_LIST[0]
+      filename: 'test_syaro_'
+      dstDir: THUMBNAIL_DIR
+    samune = new Samune(opts)
+    samune.identify()
+    .then (features) ->
+      assert _.isObject features
+      assert _.isNumber features.width
+      assert _.isNumber features.height
+      assert _.isString features.filesize
+      assert features.format is 'JPEG'
+
 
   ###
   Failure TEST
   ###
-  it 'should return [] when pass invliad url', ->
+  it 'should return Error when pass invliad image path', ->
     opts =
-      url: 'invalidurl'
+      url: 'invalid'
+      dstDir: THUMBNAIL_DIR
+    samune = new Samune(opts)
+    samune.generate(30)
+    .catch (err) ->
+      assert _.isError err
+
+  it 'should return Error when pass invliad url', ->
+    opts =
+      url: 'http://invalidurl'
       dstDir: THUMBNAIL_DIR
     samune = new Samune(opts)
     samune.generate(30)
@@ -152,3 +190,26 @@ describe 'Samune', ->
     .catch (err) ->
       assert _.isError err
       assert err.message is 'sizes is empty'
+
+  # Identify
+  it 'should return err when pass invalid image path', ->
+    opts =
+      url: JPG_PATH + "_"
+      filename: 'test_syaro'
+      dstDir: THUMBNAIL_DIR
+    samune = new Samune(opts)
+    samune.identify()
+    .catch (err) ->
+      assert _.isError err
+      assert err.message is 'image path is invalid'
+
+  it 'should return err when pass invalid image url', ->
+    opts =
+      url: "http://asda"
+      filename: 'test_syaro'
+      dstDir: THUMBNAIL_DIR
+    samune = new Samune(opts)
+    samune.identify()
+    .catch (err) ->
+      assert _.isError err
+      assert err.message is 'image url is invalid'

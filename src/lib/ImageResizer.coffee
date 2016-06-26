@@ -13,7 +13,7 @@ module.exports = class ImageResizer
 
   generateDestinationDirectory: ->
     return new Promise (resolve, reject) =>
-      throw new Error 'dstDir is invalid' if !@dstDir
+      return reject 'dstDir is invalid' if !@dstDir
       return resolve DirectoryManager.generateSync(@dstDir)
 
   cleanupOriginalImage: ->
