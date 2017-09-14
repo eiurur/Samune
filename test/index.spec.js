@@ -45,6 +45,21 @@ test('should generate test_w#{size}.jpg when pass filename with the name test', 
   });
 });
 
+test('should generate test_w#{size}.jpg when pass filename and imageMagickCustomArgs with the name test', (t) => {
+  const opts = {
+    url: JPG_URL_LIST[1],
+    filename: 'test2',
+    dstDir: THUMBNAIL_DIR,
+    imageMagickCustomArgs: ["-define", `jpeg:size=120x30`]
+  };
+  const samune = new Samune(opts);
+  return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
+    t.true(thuimbnailFilenameList.length === 4);
+    t.true(thuimbnailFilenameList[2] === 'test2_w240.jpg');
+  });
+});
+
 test('should generate gif file when pass gif url', (t) => {
   const opts = {
     url: GIF_URL,
