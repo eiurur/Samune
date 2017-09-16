@@ -74,6 +74,36 @@ test('should generate gif file when pass gif url', (t) => {
   });
 });
 
+
+test('should generate jpg file when pass jpg path', (t) => {
+  let opts = {
+    url: JPG_PATH,
+    dstDir: THUMBNAIL_DIR,
+  };
+  let samune = new Samune(opts);
+  return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
+    t.true(fs.existsSync(`${THUMBNAIL_DIR}/syaro_w120.jpg`));
+    t.true(thuimbnailFilenameList[1] === 'syaro_w120.jpg');
+  });
+});
+
+test('should generate jpg file when pass jpg path and filename', (t) => {
+  let opts = {
+    url: JPG_PATH,
+    filename: 'test_syaro',
+    dstDir: THUMBNAIL_DIR,
+  };
+  let samune = new Samune(opts);
+  return samune.generate([30, 120]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
+    t.true(fs.existsSync(`${THUMBNAIL_DIR}/test_syaro_w120.jpg`));
+    t.true(thuimbnailFilenameList[1] === 'test_syaro_w120.jpg');
+    t.true(thuimbnailFilenameList.length === 2);
+  });
+});
+
+
 // 以下、TODO
 
 // it('should generate jpg file in the /images/thumbnails/', () => {
