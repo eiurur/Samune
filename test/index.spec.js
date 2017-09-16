@@ -28,6 +28,8 @@ test('should generate jpg file when pass jpg url', (t) => {
   return samune.generate([30, 120, 480]).then((thuimbnailFilenameList) => {
     t.true(Array.isArray(thuimbnailFilenameList));
     t.true(thuimbnailFilenameList.length === 3);
+    t.true(thuimbnailFilenameList[1] === 'tumblr_op2hxiLMta1qbgq3so1_1280_w120.jpg');
+
   });
 });
 
