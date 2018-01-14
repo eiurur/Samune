@@ -15,6 +15,7 @@ const JPG_URL_LIST = [
 const GIF_URL =
   'https://68.media.tumblr.com/29ff438ae72824d1927da59ba7715b6a/tumblr_opo8okeNMK1twgfw0o3_540.gif';
 const JPG_PATH = './images_test/syaro.jpg';
+const HEAVY_PNG_PATH = './images_test/6MBover.png';
 
 /*
   URL TEST
@@ -28,7 +29,7 @@ test('should generate jpg file when pass jpg url', (t) => {
   return samune.generate([30, 120, 480]).then((thuimbnailFilenameList) => {
     t.true(Array.isArray(thuimbnailFilenameList));
     t.true(thuimbnailFilenameList.length === 3);
-    t.true(thuimbnailFilenameList[1] === 'tumblr_op2hxiLMta1qbgq3so1_1280_w120.jpg');
+    t.true(thuimbnailFilenameList[1].filename === 'tumblr_op2hxiLMta1qbgq3so1_1280_w120.jpg');
 
   });
 });
@@ -43,7 +44,7 @@ test('should generate test_w#{size}.jpg when pass filename with the name test', 
   return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
     t.true(_.isArray(thuimbnailFilenameList));
     t.true(thuimbnailFilenameList.length === 4);
-    t.true(thuimbnailFilenameList[1] === 'test_w120.jpg');
+    t.true(thuimbnailFilenameList[1].filename === 'test_w120.jpg');
   });
 });
 
@@ -58,7 +59,7 @@ test('should generate test_w#{size}.jpg when pass filename and imageMagickCustom
   return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
     t.true(_.isArray(thuimbnailFilenameList));
     t.true(thuimbnailFilenameList.length === 4);
-    t.true(thuimbnailFilenameList[2] === 'test2_w240.jpg');
+    t.true(thuimbnailFilenameList[2].filename === 'test2_w240.jpg');
   });
 });
 
@@ -84,7 +85,7 @@ test('should generate jpg file when pass jpg path', (t) => {
   return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
     t.true(_.isArray(thuimbnailFilenameList));
     t.true(fs.existsSync(`${THUMBNAIL_DIR}/syaro_w120.jpg`));
-    t.true(thuimbnailFilenameList[1] === 'syaro_w120.jpg');
+    t.true(thuimbnailFilenameList[1].filename === 'syaro_w120.jpg');
   });
 });
 
@@ -98,27 +99,29 @@ test('should generate jpg file when pass jpg path and filename', (t) => {
   return samune.generate([30, 120]).then((thuimbnailFilenameList) => {
     t.true(_.isArray(thuimbnailFilenameList));
     t.true(fs.existsSync(`${THUMBNAIL_DIR}/test_syaro_w120.jpg`));
-    t.true(thuimbnailFilenameList[1] === 'test_syaro_w120.jpg');
     t.true(thuimbnailFilenameList.length === 2);
+    t.true(thuimbnailFilenameList[1].filename === 'test_syaro_w120.jpg');
   });
 });
 
 
+
+test('should generate heavy png files in the /images/thumbnails/', (t) => {
+  let opts = {
+    url: HEAVY_PNG_PATH,
+    filename: '6MBover',
+    dstDir: THUMBNAIL_DIR,
+  };
+  let samune = new Samune(opts);
+  return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
+    t.true(fs.existsSync(`${THUMBNAIL_DIR}/6MBover_w480.png`));
+    t.true(thuimbnailFilenameList.length === 4);
+    t.true(thuimbnailFilenameList[3].filename === '6MBover_w480.png');
+  });
+});
+
 // 以下、TODO
-
-// it('should generate jpg file in the /images/thumbnails/', () => {
-//   let opts = {
-//     url: JPG_URL_LIST[1],
-//     dstDir: IMAGES_THUMBNAIL_DIR,
-//   };
-//   let samune = new Samune(opts);
-//   return samune.generate([30, 120, 240, 480])
-//   .then((thuimbnailFilenameList) => {
-//     assert(_.isArray(thuimbnailFilenameList));
-//     return assert(thuimbnailFilenameList.length === 4);
-//   });
-// });
-
 // it('should generate single jpg file when pass single size to generate()', () => {
 //   let opts = {
 //     url: JPG_URL_LIST[1],
