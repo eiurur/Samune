@@ -29,6 +29,21 @@ Generator of thumbnails from URL.
     samune.generate([30, 120, 240, 480])
     .then( thuimbnailFilenameList => console.log(thuimbnailFilenameList) );
 
+    =>  [ 
+          { width: 30,
+            filename: 'test_w30.jpg',
+            path: 'D:/path/to/thumbnails_dir/test_w30.jpg' },
+          { width: 120,
+            filename: 'test_w120.jpg',
+            path: 'D:/path/to/thumbnails_dir/test_w120.jpg' },
+          { width: 240,
+            filename: 'test_w240.jpg',
+            path: 'D:/path/to/thumbnails_dir/test_w240.jpg' },
+          { width: 480,
+            filename: 'test_w480.jpg',
+            path: 'D:/path/to/thumbnails_dir/test_w480.jpg' } 
+        ]
+
 **Filepath**
 
     const Samune = require('samune');
@@ -42,6 +57,12 @@ Generator of thumbnails from URL.
     const samune = new Samune(opts);
     samune.generate([480]);
     .then( thuimbnailFilenameList => console.log(thuimbnailFilenameList) );
+
+    =>  [ 
+          { width: 480,
+            filename: 'test_w480.jpg',
+            path: 'D:/path/to/thumbnails_dir/test_w480.jpg' } 
+        ]
 
 # TODO
 
