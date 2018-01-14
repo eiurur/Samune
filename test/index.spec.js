@@ -25,7 +25,7 @@ test('should generate jpg file when pass jpg url', (t) => {
     dstDir: THUMBNAIL_DIR,
   };
   const samune = new Samune(opts);
-  samune.generate([30, 120, 480]).then((thuimbnailFilenameList) => {
+  return samune.generate([30, 120, 480]).then((thuimbnailFilenameList) => {
     t.true(Array.isArray(thuimbnailFilenameList));
     t.true(thuimbnailFilenameList.length === 3);
     t.true(thuimbnailFilenameList[1].filename === 'tumblr_op2hxiLMta1qbgq3so1_1280_w120.jpg');
@@ -40,8 +40,8 @@ test('should generate test_w#{size}.jpg when pass filename with the name test', 
     dstDir: THUMBNAIL_DIR,
   };
   const samune = new Samune(opts);
-  samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
-    t.true(Array.isArray(thuimbnailFilenameList));
+  return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
     t.true(thuimbnailFilenameList.length === 4);
     t.true(thuimbnailFilenameList[1].filename === 'test_w120.jpg');
   });
@@ -55,8 +55,8 @@ test('should generate test_w#{size}.jpg when pass filename and imageMagickCustom
     imageMagickCustomArgs: ["-define", `jpeg:size=120x30`]
   };
   const samune = new Samune(opts);
-  samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
-    t.true(Array.isArray(thuimbnailFilenameList));
+  return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
     t.true(thuimbnailFilenameList.length === 4);
     t.true(thuimbnailFilenameList[2].filename === 'test2_w240.jpg');
   });
@@ -68,8 +68,8 @@ test('should generate gif file when pass gif url', (t) => {
     dstDir: THUMBNAIL_DIR,
   };
   const samune = new Samune(opts);
-  samune.generate([120]).then((thuimbnailFilenameList) => {
-    t.true(Array.isArray(thuimbnailFilenameList));
+  return samune.generate([120]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
     t.true(thuimbnailFilenameList.length === 1);
   });
 });
@@ -81,8 +81,8 @@ test('should generate jpg file when pass jpg path', (t) => {
     dstDir: THUMBNAIL_DIR,
   };
   let samune = new Samune(opts);
-  samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
-    t.true(Array.isArray(thuimbnailFilenameList));
+  return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
     t.true(fs.existsSync(`${THUMBNAIL_DIR}/syaro_w120.jpg`));
     t.true(thuimbnailFilenameList[1].filename === 'syaro_w120.jpg');
   });
@@ -95,8 +95,8 @@ test('should generate jpg file when pass jpg path and filename', (t) => {
     dstDir: THUMBNAIL_DIR,
   };
   let samune = new Samune(opts);
-  samune.generate([30, 120]).then((thuimbnailFilenameList) => {
-    t.true(Array.isArray(thuimbnailFilenameList));
+  return samune.generate([30, 120]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
     t.true(fs.existsSync(`${THUMBNAIL_DIR}/test_syaro_w120.jpg`));
     t.true(thuimbnailFilenameList.length === 2);
     t.true(thuimbnailFilenameList[1].filename === 'test_syaro_w120.jpg');
@@ -112,8 +112,8 @@ test('should generate heavy png files in the /images/thumbnails/', (t) => {
     dstDir: THUMBNAIL_DIR,
   };
   let samune = new Samune(opts);
-  samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
-    t.true(Array.isArray(thuimbnailFilenameList));
+  return samune.generate([30, 120, 240, 480]).then((thuimbnailFilenameList) => {
+    t.true(_.isArray(thuimbnailFilenameList));
     t.true(fs.existsSync(`${THUMBNAIL_DIR}/6MBover_w480.png`));
     t.true(thuimbnailFilenameList.length === 4);
     t.true(thuimbnailFilenameList[3].filename === '6MBover_w480.png');
@@ -121,79 +121,77 @@ test('should generate heavy png files in the /images/thumbnails/', (t) => {
 });
 
 
-/*
-Failure TEST
-*/
-// test('should return Error when pass invliad image path', (t) => {
+/**
+ * 以下、Failure TEST
+ */
+test('should return Error when pass invliad image path', async (t) => {
+  let opts = {
+    url: 'invalid',
+    dstDir: THUMBNAIL_DIR,
+  };
+  let samune = new Samune(opts);
+  return await t.throws(samune.generate([30]));
+});
+
+test('should return Error when pass invliad url', async (t) => {
+  let opts = {
+    url: 'http://invalidurl',
+    dstDir: THUMBNAIL_DIR,
+  };
+  let samune = new Samune(opts);
+  return await t.throws(samune.generate(30));
+});
+
+/**
+ * FIXME: 原因不明。
+ * 152:     t.true(err.message === 'dstDir is invalid');
+  Value is not `true`:
+
+  false
+
+  err.message === 'dstDir is invalid'
+  => false
+
+  err.message
+  => 'Error: dstDir is invalid'
+
+  err
+  => Error {
+    message: 'Error: dstDir is invalid',
+  }
+ */
+// test('should return err when dont pass dstDir', async (t) => {
 //   let opts = {
-//     url: 'invalid',
-//     dstDir: THUMBNAIL_DIR,
+//     url: JPG_URL_LIST[1],
 //   };
 //   let samune = new Samune(opts);
-//   samune.generate([30]).then().catch((err) => {
-//     t.is(err instanceof Error)
+//   return samune.generate([30, 120, 240, 480]).catch((err) => {
+//     t.true(_.isError(err));
+//     t.true(err.message === 'dstDir is invalid');
 //   });
 // });
 
-// 以下、TODO
+test('should return err when pass NaN to generate()', async (t) => {
+  let opts = {
+    url: JPG_URL_LIST[1],
+    dstDir: THUMBNAIL_DIR,
+  };
+  let samune = new Samune(opts);
+  return samune.generate(['a']).catch((err) => {
+    t.true(_.isError(err));
+    t.true(err.message === 'sizes include NaN');
+  });
+});
 
-// it('should return Error when pass invliad image path', () => {
-//   let opts = {
-//     url: 'invalid',
-//     dstDir: THUMBNAIL_DIR,
-//   };
-//   let samune = new Samune(opts);
-//   samune.generate(30)
-//     .catch((err) => {
-//       return assert(_.isError(err));
-//     });
-// });
+test('should return err when pass empty to generate()', async (t) => {
+  let opts = {
+    url: JPG_URL_LIST[1],
+    dstDir: THUMBNAIL_DIR,
+  };
+  let samune = new Samune(opts);
+  return samune.generate().catch((err) => {
+    t.true(_.isError(err));
+    t.true(err.message === 'sizes is empty');
+  });
+});
 
-// it('should return Error when pass invliad url', () => {
-//   let opts = {
-//     url: 'http://invalidurl',
-//     dstDir: THUMBNAIL_DIR,
-//   };
-//   let samune = new Samune(opts);
-//   samune.generate(30)
-//     .catch((err) => {
-//       return assert(_.isError(err));
-//     });
-// });
-
-// it('should return err when dont pass dstDir', () => {
-//   let opts =
-//     { url: JPG_URL_LIST[1] };
-//   let samune = new Samune(opts);
-//   samune.generate(30)
-//     .catch((err) => {
-//       assert(_.isError(err));
-//       return assert(err.message === 'dstDir is invalid');
-//     });
-// });
-
-// it('should return err when pass NaN to generate()', () => {
-//   let opts = {
-//     url: JPG_URL_LIST[1],
-//     dstDir: THUMBNAIL_DIR,
-//   };
-//   let samune = new Samune(opts);
-//   samune.generate('a')
-//     .catch((err) => {
-//       assert(_.isError(err));
-//       return assert(err.message === 'sizes include NaN');
-//     });
-// });
-
-// it('should return err when pass empty to generate()', () => {
-//   let opts = {
-//     url: JPG_URL_LIST[1],
-//     dstDir: THUMBNAIL_DIR,
-//   };
-//   let samune = new Samune(opts);
-//   samune.generate()
-//     .catch((err) => {
-//       assert(_.isError(err));
-//       return assert(err.message === 'sizes is empty');
-//     });
-// });
