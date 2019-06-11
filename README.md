@@ -1,7 +1,6 @@
-Samune
-======
+# Samune
 
-[![Build Status](https://travis-ci.org/eiurur/Samune.svg?branch=master)](https://travis-ci.org/eiurur/Samune)
+[![Build Status](https://travis-ci.com/eiurur/Samune.svg?branch=master)](https://travis-ci.com/eiurur/Samune)
 [![Code Climate](https://codeclimate.com/github/eiurur/Samune/badges/gpa.svg)](https://codeclimate.com/github/eiurur/Samune)
 
 Generator of thumbnails from URL.
@@ -9,7 +8,6 @@ Generator of thumbnails from URL.
 # Installation
 
     npm i samune -S
-
 
 # Usage
 
@@ -29,7 +27,7 @@ Generator of thumbnails from URL.
     samune.generate([30, 120, 240, 480])
     .then( thuimbnailFilenameList => console.log(thuimbnailFilenameList) );
 
-    =>  [ 
+    =>  [
           { width: 30,
             filename: 'test_w30.jpg',
             path: 'D:/path/to/thumbnails_dir/test_w30.jpg' },
@@ -41,7 +39,7 @@ Generator of thumbnails from URL.
             path: 'D:/path/to/thumbnails_dir/test_w240.jpg' },
           { width: 480,
             filename: 'test_w480.jpg',
-            path: 'D:/path/to/thumbnails_dir/test_w480.jpg' } 
+            path: 'D:/path/to/thumbnails_dir/test_w480.jpg' }
         ]
 
 **Filepath**
@@ -58,10 +56,10 @@ Generator of thumbnails from URL.
     samune.generate([480]);
     .then( thuimbnailFilenameList => console.log(thuimbnailFilenameList) );
 
-    =>  [ 
+    =>  [
           { width: 480,
             filename: 'test_w480.jpg',
-            path: 'D:/path/to/thumbnails_dir/test_w480.jpg' } 
+            path: 'D:/path/to/thumbnails_dir/test_w480.jpg' }
         ]
 
 # TODO
