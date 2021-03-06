@@ -1,6 +1,6 @@
 {
   "name": "samune",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Generator of thumbnails",
   "main": "./index.js",
   "scripts": {
