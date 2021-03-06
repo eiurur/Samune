@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const fs = require('fs');
+const fsp = require('fs-extra');
 const test = require('ava');
 const Samune = require('..');
 
@@ -22,6 +22,10 @@ const check = async (t, params, opts, result) => {
   t.true(thuimbnailFilenameList.length === opts.sizes.length);
   t.true(thuimbnailFilenameList[0].filename === result.shouldHeadFilename);
 };
+
+test.before(t => {
+  fsp.rmdirSync(THUMBNAIL_DIR, { recursive: true });
+});
 
 /**
  * 以下、Failure TEST

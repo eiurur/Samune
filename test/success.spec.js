@@ -27,6 +27,12 @@ const check = async (t, params, opts, result) => {
     t.fail();
   }
 };
+
+test.before(t => {
+  fsp.rmdirSync(THUMBNAIL_DIR, { recursive: true });
+});
+
+
 /*
   URL TEST
   */
