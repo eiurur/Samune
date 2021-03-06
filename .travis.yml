@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-  - '8'
+  - '12'
+  - '14'
 script: "npm run test"
 env:
   - CXX=g++-4.8
