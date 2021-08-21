@@ -8,10 +8,12 @@ const JPG_URL_LIST = [
   'https://64.media.tumblr.com/8435bb2072923a0e3d05885c6f074a4b/tumblr_op2hxiLMta1qbgq3so1_1280.jpg',
   'https://64.media.tumblr.com/25cb865c25db2a80d4e5479f4eceee38/tumblr_oq3d6fXiPk1qzljvuo1_1280.jpg',
 ];
-const GIF_URL = 'https://64.media.tumblr.com/29ff438ae72824d1927da59ba7715b6a/tumblr_opo8okeNMK1twgfw0o3_540.gif';
+const GIF_URL =
+  'https://64.media.tumblr.com/29ff438ae72824d1927da59ba7715b6a/tumblr_opo8okeNMK1twgfw0o3_540.gif';
 const JPG_PATH = './test/images/syaro.jpg';
 const HEAVY_PNG_PATH = './test/images/6MBover.png';
 const WEBP_PATH = './test/images/webp.webp';
+const AVIF_PATH = './test/images/avif.avif';
 const GIF_PATH = './test/images/test.gif';
 
 const check = async (t, params, opts, result) => {
@@ -28,10 +30,9 @@ const check = async (t, params, opts, result) => {
   }
 };
 
-test.before(t => {
+test.before((t) => {
   fsp.rmdirSync(THUMBNAIL_DIR, { recursive: true });
 });
-
 
 /*
   URL TEST
@@ -72,7 +73,7 @@ test('should generate test_w#{size}.jpg when pass filename and resizeOptions wit
     url: JPG_URL_LIST[1],
     filename: 'test2',
     dstDir: THUMBNAIL_DIR,
-    resizeOptions: {quality: 75},
+    resizeOptions: { quality: 75 },
   };
   const opts = {
     sizes: [30, 120, 240, 480],
@@ -158,6 +159,22 @@ test('should generate webp files in the /images/thumbnails/', async (t) => {
   const result = {
     shouldExistPath: `${THUMBNAIL_DIR}/output_w480.webp`,
     shouldHeadFilename: 'output_w30.webp',
+  };
+  await check(t, params, opts, result);
+});
+
+test('should generate avif files in the /images/thumbnails/', async (t) => {
+  const params = {
+    url: AVIF_PATH,
+    filename: 'output',
+    dstDir: THUMBNAIL_DIR,
+  };
+  const opts = {
+    sizes: [30, 120, 240, 480],
+  };
+  const result = {
+    shouldExistPath: `${THUMBNAIL_DIR}/output_w480.avif`,
+    shouldHeadFilename: 'output_w30.avif',
   };
   await check(t, params, opts, result);
 });
